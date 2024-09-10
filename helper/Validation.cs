@@ -1,13 +1,18 @@
-using System.Dynamic;
-
 public static class Validation
 {
 
-    public static bool FolderExistsValidation()
+    public static bool FolderExistsValidation(string path)
     {
-        var inputFolder = Directory.GetDirectories(Path.Combine(Directory.GetCurrentDirectory(), "data", "input"));
+        try
+        {
+            string[] listdir = Directory.GetDirectories(path);
+            return true;
 
-        if (inputFolder.Length < 1) return false;
-        return true;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            return false;
+        }
     }
 }

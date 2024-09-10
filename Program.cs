@@ -1,18 +1,26 @@
-﻿using System.Data;
-using NPOI.SS.UserModel;
+﻿using NPOI.SS.UserModel;
 
 namespace DataExtractorXls;
 
 class Program
 {
-    private static DataTable _dt = new DataTable();
-    private static List<string> _rows = new List<string>();
-    private static ISheet _sheet;
+    private static string? path;
+    private static ISheet? _sheet;
+    private static IWorkbook? _workbook;
     static void Main(string[] args)
     {
-        Console.WriteLine("WELCOME TO THE EXTRACTOR ENGINE");
 
-        new ReadFiles(_dt, _rows, _sheet);
-        Console.WriteLine(Validation.FolderExistsValidation());
+        Console.WriteLine("WELCOME TO THE EXTRACTOR ENGINE");
+        while (path == null || !Validation.FolderExistsValidation(path))
+        {
+            Console.WriteLine("Input the folder path: ");
+            path = Console.ReadLine();
+        }
+
+        Console.WriteLine("Success");
+
+        new ReadFiles(_sheet, _workbook);
     }
+
+
 }
