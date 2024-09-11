@@ -42,7 +42,7 @@ public class DataExtractionServices
                                 ICell cell = row.GetCell(cellIndex);
                                 if (cell != null && _extractedData != null && cell.CellType != CellType.Blank)
                                 {
-
+                                    _extractedData.Add(cell);
                                 }
                             }
                         }
