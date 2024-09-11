@@ -1,4 +1,4 @@
-using System.Data;
+using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
 
 namespace DataExtractorXls;
@@ -6,37 +6,49 @@ namespace DataExtractorXls;
 public class DataExtractionServices
 {
     private ExcelFile? _excelFile;
+    private List<string>? _extractedData;
 
-    public DataExtractionServices(ExcelFile? excelFile)
+    public DataExtractionServices(ExcelFile? excelFile, List<string> extractedData)
     {
         if (excelFile != null) _excelFile = excelFile;
+        _extractedData = extractedData;
     }
 
     public void Extract()
     {
         if (_excelFile != null)
         {
-            Console.WriteLine($"Extracting: {_excelFile.Path}");
+            Console.WriteLine($"\n\nExtracting: {_excelFile.Path}");
 
             using (FileStream fs = new FileStream(_excelFile.Path, FileMode.Open, FileAccess.Read))
             {
-                ISheet sheet = _excelFile.Sheet;
+                ISheet? sheet = _excelFile.Sheet;
+                int startRow = 9;
                 int maxRows = 100;
 
-                for (int rowIndex = 0; rowIndex < maxRows; rowIndex++)
+                for (int rowIndex = startRow; rowIndex < maxRows; rowIndex++)
                 {
                     IRow row = sheet.GetRow(rowIndex);
                     if (row != null)
                     {
                         int maxCells = 10;
-                        for (int cellIndex = 0; cellIndex < maxCells; cellIndex++)
+                        for (int cellIndex = 1; cellIndex < maxCells; cellIndex++)
                         {
                             ICell cell = row.GetCell(cellIndex);
-                            Console.WriteLine(cell);
+                            if (cell != null && cell.CellType != CellType.Blank)
+                            {
+                                _extractedData.Add(cell.ToString());
+
+                            }
                         }
                     }
                 }
             }
         }
+        Console.WriteLine($"Extraction Completed\nTotal Extracted: {_extractedData.Count}");
+    }
+    public void Transform()
+    {
+
     }
 }

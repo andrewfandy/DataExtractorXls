@@ -2,7 +2,7 @@
 
 namespace DataExtractorXls;
 
-class Program
+internal class Program
 {
 
     private static List<ExcelFile>? _excelFiles;
@@ -34,14 +34,25 @@ class Program
     }
     private static void DataProcessing()
     {
-        DataExtractionServices services = new DataExtractionServices(_excelFiles[0]);
-        services.Extract();
-        // foreach (ExcelFile file in _excelFiles)
-        // {
-        //     DataExtractionServices services = new DataExtractionServices(file);
-        //     services.Extract();
-        // }
+        if (_excelFiles != null)
+        {
 
+            // DataExtractionServices services = new DataExtractionServices(_excelFiles[1], extractedData);
+            // services.Extract();
+            foreach (ExcelFile file in _excelFiles)
+            {
+                List<string> extractedData = new List<string>();
+
+                // to do extracted data must be separated for each ExcelFiles
+                DataExtractionServices services = new DataExtractionServices(file, extractedData);
+                services.Extract();
+            }
+        }
+        else
+        {
+            Console.WriteLine("No Excel files found in the directory.");
+
+        }
 
     }
 }
