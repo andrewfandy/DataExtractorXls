@@ -1,3 +1,5 @@
+using DataExtractorXls;
+
 public static class Validation
 {
 
@@ -15,4 +17,9 @@ public static class Validation
             return false;
         }
     }
+    public static bool ExcelFileExistsValidation(List<ExcelFile>? excelFiles)
+    {
+        return (excelFiles != null && excelFiles.Count() > 0);
+    }
+
 }
