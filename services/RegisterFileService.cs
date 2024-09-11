@@ -35,7 +35,7 @@ public class RegisterFileService
                     _excelFiles?.Add(new ExcelFile(file, workbook));
                 }
 
-                if (Validation.ExcelFileExistsValidation(_excelFiles))
+                if (_excelFiles != null && Validation.ExcelFileExistsValidation(_excelFiles))
                 {
                     Console.WriteLine($"\nExcel files registered\nTotal file(s): {_excelFiles.Count()} ");
                 }
