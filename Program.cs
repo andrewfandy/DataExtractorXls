@@ -18,7 +18,7 @@ internal class Program
             Console.WriteLine("Input the folder path: ");
             _path = Console.ReadLine();
         }
-
+        RegisterFile();
         DataProcessing();
 
     }
@@ -43,10 +43,9 @@ internal class Program
             // services.Extract();
             foreach (ExcelFile file in _excelFiles)
             {
-                List<string> extractedData = new List<string>();
 
                 // to do extracted data must be separated for each ExcelFiles
-                DataExtractionServices services = new DataExtractionServices(file, extractedData);
+                DataExtractionServices services = new DataExtractionServices(file);
                 services.Extract();
                 services.Transform();
             }
