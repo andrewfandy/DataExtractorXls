@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DataExtractorXls")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e1a0cf5db61d7bf7984e1a4e937aa8f32842faaa")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d7dcb4bbb99059c5f7b73526896a08bb9b1c8cfa")]
 [assembly: System.Reflection.AssemblyProductAttribute("DataExtractorXls")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DataExtractorXls")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
