@@ -4,23 +4,44 @@ namespace DataExtractorXls;
 
 class Program
 {
-    private static string? path;
-    private static ISheet? _sheet;
-    private static IWorkbook? _workbook;
+
+    private static List<ExcelFile>? _excelFiles;
+    private static string? _path;
     static void Main(string[] args)
     {
 
+        _path = @"C:\Users\andre\PROJECTS\DataExtractorXls\data\excellence";
+
         Console.WriteLine("WELCOME TO THE EXTRACTOR ENGINE");
-        while (path == null || !Validation.FolderExistsValidation(path))
+        while (_path == null || !Validation.FolderExistsValidation(_path))
         {
             Console.WriteLine("Input the folder path: ");
-            path = Console.ReadLine();
+            _path = Console.ReadLine();
         }
 
-        Console.WriteLine("Success");
+        if (RegisterFile())
+        {
+            DataProcessing();
+        }
 
-        new ReadFiles(_sheet, _workbook);
     }
 
+    private static bool RegisterFile()
+    {
+        _excelFiles = new List<ExcelFile>();
+        new RegisterFileService(_excelFiles, _path);
+        return _excelFiles != null && _excelFiles.Count() > 0;
+    }
+    private static void DataProcessing()
+    {
+        DataExtractionServices services = new DataExtractionServices(_excelFiles[0]);
+        services.Extract();
+        // foreach (ExcelFile file in _excelFiles)
+        // {
+        //     DataExtractionServices services = new DataExtractionServices(file);
+        //     services.Extract();
+        // }
 
+
+    }
 }
