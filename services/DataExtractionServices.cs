@@ -6,7 +6,7 @@ namespace DataExtractorXls;
 public class DataExtractionServices
 {
     private ExcelFile? _excelFile;
-    private List<string>? _extractedData;
+    private List<ICell>? _extractedData;
 
     public DataExtractionServices(ExcelFile? excelFile)
     {
@@ -28,27 +28,31 @@ public class DataExtractionServices
                 ISheet? sheet = _excelFile.Sheet;
                 int startRow = 9;
                 int maxRows = 100;
-
-                for (int rowIndex = startRow; rowIndex < maxRows; rowIndex++)
+                if (sheet != null)
                 {
-                    IRow row = sheet.GetRow(rowIndex);
-                    if (row != null)
-                    {
-                        int maxCells = 10;
-                        for (int cellIndex = 1; cellIndex < maxCells; cellIndex++)
-                        {
-                            ICell cell = row.GetCell(cellIndex);
-                            if (cell != null && cell.CellType != CellType.Blank)
-                            {
-                                _extractedData.Add(cell.ToString());
 
+                    for (int rowIndex = startRow; rowIndex < maxRows; rowIndex++)
+                    {
+                        IRow row = sheet.GetRow(rowIndex);
+                        if (row != null)
+                        {
+                            int maxCells = 10;
+                            for (int cellIndex = 1; cellIndex < maxCells; cellIndex++)
+                            {
+                                ICell cell = row.GetCell(cellIndex);
+                                if (cell != null && _extractedData != null && cell.CellType != CellType.Blank)
+                                {
+
+                                }
                             }
                         }
                     }
                 }
             }
         }
-        Console.WriteLine($"Extraction Completed\nTotal Extracted: {_extractedData.Count}");
+
+        if (_extractedData != null)
+            Console.WriteLine($"Extraction Completed\nTotal Extracted: {_extractedData.Count}");
     }
     public void Transform()
     {
