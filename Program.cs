@@ -19,18 +19,20 @@ internal class Program
             _path = Console.ReadLine();
         }
 
-        if (RegisterFile())
-        {
-            DataProcessing();
-        }
+        DataProcessing();
 
     }
 
-    private static bool RegisterFile()
+    private static void RegisterFile()
     {
-        _excelFiles = new List<ExcelFile>();
-        new RegisterFileService(_excelFiles, _path);
-        return _excelFiles != null && _excelFiles.Count() > 0;
+
+        if (_path != null)
+        {
+            _excelFiles = new List<ExcelFile>();
+            new RegisterFileService(_excelFiles, _path);
+
+        }
+
     }
     private static void DataProcessing()
     {
@@ -46,6 +48,7 @@ internal class Program
                 // to do extracted data must be separated for each ExcelFiles
                 DataExtractionServices services = new DataExtractionServices(file, extractedData);
                 services.Extract();
+                services.Transform();
             }
         }
         else
