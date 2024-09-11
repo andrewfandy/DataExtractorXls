@@ -8,10 +8,13 @@ public class DataExtractionServices
     private ExcelFile? _excelFile;
     private List<string>? _extractedData;
 
-    public DataExtractionServices(ExcelFile? excelFile, List<string> extractedData)
+    public DataExtractionServices(ExcelFile? excelFile)
     {
-        if (excelFile != null) _excelFile = excelFile;
-        _extractedData = extractedData;
+        if (excelFile != null)
+        {
+            _excelFile = excelFile;
+            _extractedData = _excelFile.ExtractedContent;
+        }
     }
 
     public void Extract()

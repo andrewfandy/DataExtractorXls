@@ -18,19 +18,21 @@ internal class Program
             Console.WriteLine("Input the folder path: ");
             _path = Console.ReadLine();
         }
-
-        if (RegisterFile())
-        {
-            DataProcessing();
-        }
+        RegisterFile();
+        DataProcessing();
 
     }
 
-    private static bool RegisterFile()
+    private static void RegisterFile()
     {
-        _excelFiles = new List<ExcelFile>();
-        new RegisterFileService(_excelFiles, _path);
-        return _excelFiles != null && _excelFiles.Count() > 0;
+
+        if (_path != null)
+        {
+            _excelFiles = new List<ExcelFile>();
+            new RegisterFileService(_excelFiles, _path);
+
+        }
+
     }
     private static void DataProcessing()
     {
@@ -41,11 +43,11 @@ internal class Program
             // services.Extract();
             foreach (ExcelFile file in _excelFiles)
             {
-                List<string> extractedData = new List<string>();
 
                 // to do extracted data must be separated for each ExcelFiles
-                DataExtractionServices services = new DataExtractionServices(file, extractedData);
+                DataExtractionServices services = new DataExtractionServices(file);
                 services.Extract();
+                services.Transform();
             }
         }
         else
