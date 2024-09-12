@@ -10,7 +10,7 @@ internal class Program
     static void Main(string[] args)
     {
 
-        _path = @"C:\Users\andre\PROJECTS\DataExtractorXls\data\excellence";
+        _path = Environment.GetEnvironmentVariable("EXCEL_PATH_TEMP");
 
         Console.WriteLine("WELCOME TO THE EXTRACTOR ENGINE");
         while (_path == null || !Validation.FolderExistsValidation(_path))
