@@ -5,7 +5,7 @@ using NPOI.XSSF.UserModel;
 
 namespace DataExtractorXls;
 
-public class RegisterFileService
+public class RegisterFileService : IDataProcessing
 {
     private List<ExcelFile>? _excelFiles;
     private string _inputPath;
@@ -14,41 +14,36 @@ public class RegisterFileService
         _inputPath = path;
         _excelFiles = excelFiles;
 
-        Register();
     }
 
-    private void Register()
+    public void Process()
     {
-        string[] files = Directory.GetFiles(_inputPath);
-
         try
         {
-            if (files.Length > 0)
+            Console.WriteLine($"Registering Files in {_inputPath}");
+            string[] files = Directory.GetFiles(_inputPath);
+            if (files.Length < 1)
             {
-                foreach (string file in files)
+                throw new FileNotFoundException();
+            }
+            foreach (string file in files)
+            {
+                IWorkbook workbook;
+                using (FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read))
                 {
-                    IWorkbook workbook;
-                    using (FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read))
-                    {
-                        workbook = file.EndsWith(".xlsx") ? new XSSFWorkbook(fs) : new HSSFWorkbook(fs);
-                    }
-                    _excelFiles?.Add(new ExcelFile(file, workbook));
+                    workbook = file.EndsWith(".xlsx") ? new XSSFWorkbook(fs) : new HSSFWorkbook(fs);
                 }
-
-                if (_excelFiles != null && Validation.ExcelFileExistsValidation(_excelFiles))
-                {
-                    Console.WriteLine($"\nExcel files registered\nTotal file(s): {_excelFiles.Count()} ");
-                }
-                else
-                {
-                    Console.WriteLine("No Excel files found in the directory.");
-                }
+                _excelFiles?.Add(new ExcelFile(file, workbook));
             }
 
-            else
+            if (_excelFiles == null)
             {
-                Console.WriteLine("No files found in the directory.");
+                Console.WriteLine("No Excel files found in the directory.");
+
             }
+            Console.WriteLine($"\nExcel files registered\nTotal file(s): {_excelFiles?.Count()} ");
+
+
         }
         catch (FileNotFoundException fnfe)
         {
