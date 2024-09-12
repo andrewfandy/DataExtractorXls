@@ -14,30 +14,28 @@ internal class Program
 
     public static void Run()
     {
+        ConsoleKey key;
         Console.WriteLine("WELCOME TO THE EXTRACTOR ENGINE");
         Console.WriteLine("PRESS 'ENTER' TO BEGIN\nPRESS 'Q' or 'ESC' TO EXIT");
-        ConsoleKey key = Console.ReadKey(intercept: true).Key;
-        while (key == ConsoleKey.Enter)
+        do
         {
-            Console.WriteLine("\n\nInput the folder path: ");
-            _path = Console.ReadLine();
 
-            RegisterFile();
-            DataProcessing();
-
-            Console.WriteLine("\n\nProcess Complete\nPress Enter to start again\nPress Q or Escape to exit");
             key = Console.ReadKey(intercept: true).Key;
-        }
+            if (key == ConsoleKey.Enter)
+            {
+                Console.WriteLine("\n\nInput the folder path: ");
+                _path = Console.ReadLine();
+                RegisterFile();
+                DataProcessing();
 
-        if (key == ConsoleKey.Q || key == ConsoleKey.Escape)
-        {
-            Console.WriteLine("\nGoodbye!");
-            return;
-        };
-        Run();
+                Console.WriteLine("\n\nProcess Complete\nPress Enter to start again\nPress Q or Escape to exit");
+                key = Console.ReadKey(intercept: true).Key;
+
+
+            }
+        } while (key != ConsoleKey.Q && key != ConsoleKey.Escape);
 
     }
-
     private static void RegisterFile()
     {
 
