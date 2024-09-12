@@ -30,32 +30,26 @@ public class DataExtractionServices : IDataProcessing
                 ISheet? sheet = _excelFile.Sheet;
                 int startRow = 9;
                 int maxRows = 100;
-                if (sheet != null)
+                if (sheet == null)
                 {
-
-                    // TODO: refactor the nested logic
-                    for (int rowIndex = startRow; rowIndex < maxRows; rowIndex++)
+                    Console.WriteLine("No sheets found!");
+                    return;
+                }
+                for (int rowIndex = startRow; rowIndex < maxRows; rowIndex++)
+                {
+                    IRow row = sheet.GetRow(rowIndex);
+                    if (row == null) continue;
+                    int maxCells = 10;
+                    for (int cellIndex = 1; cellIndex < maxCells; cellIndex++)
                     {
-                        IRow row = sheet.GetRow(rowIndex);
-                        if (row != null)
+                        ICell cell = row.GetCell(cellIndex);
+                        if (cell != null && _extractedData != null && cell.CellType != CellType.Blank)
                         {
-                            int maxCells = 10;
-                            for (int cellIndex = 1; cellIndex < maxCells; cellIndex++)
-                            {
-                                ICell cell = row.GetCell(cellIndex);
-                                if (cell != null && _extractedData != null && cell.CellType != CellType.Blank)
-                                {
-                                    Console.WriteLine(cell);
-                                    _extractedData.Add(cell);
-                                }
-                            }
+                            _extractedData.Add(cell);
                         }
                     }
                 }
-                else
-                {
-                    Console.WriteLine("Sheet not found");
-                }
+
             }
         }
 
