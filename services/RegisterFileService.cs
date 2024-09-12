@@ -20,6 +20,7 @@ public class RegisterFileService : IDataProcessing
     {
         try
         {
+            Console.WriteLine($"Registering Files in {_inputPath}");
             string[] files = Directory.GetFiles(_inputPath);
             if (files.Length < 1)
             {
