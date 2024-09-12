@@ -48,6 +48,10 @@ public class DataExtractionServices
                         }
                     }
                 }
+                else
+                {
+                    Console.WriteLine("Sheet not found");
+                }
             }
         }
 
