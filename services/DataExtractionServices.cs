@@ -3,7 +3,9 @@ using NPOI.SS.UserModel;
 
 namespace DataExtractorXls;
 
-public class DataExtractionServices
+
+// implement IDataProcessing interface
+public class DataExtractionServices : IDataProcessing
 {
     private ExcelFile? _excelFile;
     private List<ICell>? _extractedData;
@@ -17,7 +19,7 @@ public class DataExtractionServices
         }
     }
 
-    public void Extract()
+    public void Process()
     {
         if (_excelFile != null)
         {
@@ -31,6 +33,7 @@ public class DataExtractionServices
                 if (sheet != null)
                 {
 
+                    // TODO: refactor the nested logic
                     for (int rowIndex = startRow; rowIndex < maxRows; rowIndex++)
                     {
                         IRow row = sheet.GetRow(rowIndex);
@@ -42,11 +45,16 @@ public class DataExtractionServices
                                 ICell cell = row.GetCell(cellIndex);
                                 if (cell != null && _extractedData != null && cell.CellType != CellType.Blank)
                                 {
+                                    Console.WriteLine(cell);
                                     _extractedData.Add(cell);
                                 }
                             }
                         }
                     }
+                }
+                else
+                {
+                    Console.WriteLine("Sheet not found");
                 }
             }
         }
@@ -54,8 +62,5 @@ public class DataExtractionServices
         if (_extractedData != null)
             Console.WriteLine($"Extraction Completed\nTotal Extracted: {_extractedData.Count}");
     }
-    public void Transform()
-    {
 
-    }
 }
