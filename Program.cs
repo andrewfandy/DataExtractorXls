@@ -16,7 +16,7 @@ internal class Program
     {
         Console.WriteLine("WELCOME TO THE EXTRACTOR ENGINE");
         Console.WriteLine("PRESS 'ENTER' TO BEGIN\nPRESS 'Q' or 'ESC' TO EXIT");
-        ConsoleKey key = Console.ReadKey().Key;
+        ConsoleKey key = Console.ReadKey(intercept: true).Key;
         while (key == ConsoleKey.Enter)
         {
             Console.WriteLine("\n\nInput the folder path: ");
@@ -26,11 +26,12 @@ internal class Program
             DataProcessing();
 
             Console.WriteLine("\n\nProcess Complete\nPress Enter to start again\nPress Q or Escape to exit");
-            key = Console.ReadKey().Key;
+            key = Console.ReadKey(intercept: true).Key;
         }
-        if (key == ConsoleKey.Q && key == ConsoleKey.Escape)
+
+        if (key == ConsoleKey.Q || key == ConsoleKey.Escape)
         {
-            Console.WriteLine("Goodbye!");
+            Console.WriteLine("\nGoodbye!");
             return;
         };
         Run();
