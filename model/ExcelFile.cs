@@ -4,7 +4,7 @@ namespace DataExtractorXls;
 
 public class ExcelFile
 {
-    public string Path { get; set; }
+    public string? Path { get; set; }
     public IWorkbook Workbook { get; set; }
     public ISheet? Sheet { get; set; }
     public string FileType { get; set; }
@@ -23,7 +23,11 @@ public class ExcelFile
 
     public override string ToString()
     {
-        string[] split = Path.Split(@"\");
-        return $"File Path: {split.Last()}";
+        if (Path != null)
+        {
+            string[] split = Path.Split(@"\");
+            return $"File Path: {split.Last()}";
+        }
+        return "";
     }
 }
