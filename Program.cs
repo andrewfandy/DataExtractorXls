@@ -28,7 +28,7 @@ internal class Program
             Console.WriteLine("\n\nProcess Complete\nPress Enter to start again\nPress Q or Escape to exit");
             key = Console.ReadKey().Key;
         }
-        if (key != ConsoleKey.Q && key != ConsoleKey.Escape)
+        if (key == ConsoleKey.Q && key == ConsoleKey.Escape)
         {
             Console.WriteLine("Goodbye!");
             return;
