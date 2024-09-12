@@ -36,18 +36,19 @@ internal class Program
     }
     private static void DataProcessing()
     {
+
+        // consider to refactor into separates object
         if (_excelFiles != null)
         {
 
-            // DataExtractionServices services = new DataExtractionServices(_excelFiles[1], extractedData);
-            // services.Extract();
             foreach (ExcelFile file in _excelFiles)
             {
 
                 // to do extracted data must be separated for each ExcelFiles
-                DataExtractionServices services = new DataExtractionServices(file);
-                services.Extract();
-                services.Transform();
+                IDataProcessing services = new DataExtractionServices(file);
+                services.Process();
+
+                services = new DataTransformServices(); // temp
             }
         }
         else
