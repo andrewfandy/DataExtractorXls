@@ -10,11 +10,11 @@ internal class Program
     static void Main(string[] args)
     {
 
-        _path = Environment.GetEnvironmentVariable("EXCEL_PATH_TEMP");
 
         Console.WriteLine("WELCOME TO THE EXTRACTOR ENGINE");
         while (_path == null || !Validation.FolderExistsValidation(_path))
         {
+
             Console.WriteLine("Input the folder path: ");
             _path = Console.ReadLine();
         }
@@ -37,25 +37,21 @@ internal class Program
     private static void DataProcessing()
     {
 
-        // consider to refactor into separates object
-        if (_excelFiles != null)
-        {
-
-            foreach (ExcelFile file in _excelFiles)
-            {
-
-                // to do extracted data must be separated for each ExcelFiles
-                IDataProcessing services = new DataExtractionServices(file);
-                services.Process();
-
-                services = new DataTransformServices(); // temp
-            }
-        }
-        else
+        if (_excelFiles == null)
         {
             Console.WriteLine("No Excel files found in the directory.");
-
+            return;
         }
+        foreach (ExcelFile file in _excelFiles)
+        {
+
+            // to do extracted data must be separated for each ExcelFiles
+            IDataProcessing services = new DataExtractionServices(file);
+            services.Process();
+
+            services = new DataTransformServices(); // temp
+        }
+
 
     }
 }

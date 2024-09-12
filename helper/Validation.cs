@@ -19,7 +19,7 @@ public static class Validation
     }
     public static bool ExcelFileExistsValidation(List<ExcelFile>? excelFiles)
     {
-        return (excelFiles != null && excelFiles.Count() > 0);
+        return excelFiles != null && excelFiles.Count() > 0;
     }
 
 }
