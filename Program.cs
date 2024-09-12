@@ -9,17 +9,31 @@ internal class Program
     private static string? _path;
     static void Main(string[] args)
     {
+        Run();
+    }
 
-
+    public static void Run()
+    {
         Console.WriteLine("WELCOME TO THE EXTRACTOR ENGINE");
-        while (_path == null || !Validation.FolderExistsValidation(_path))
+        Console.WriteLine("PRESS 'ENTER' TO BEGIN\nPRESS 'Q' or 'ESC' TO EXIT");
+        ConsoleKey key = Console.ReadKey().Key;
+        while (key == ConsoleKey.Enter)
         {
-
-            Console.WriteLine("Input the folder path: ");
+            Console.WriteLine("\n\nInput the folder path: ");
             _path = Console.ReadLine();
+
+            RegisterFile();
+            DataProcessing();
+
+            Console.WriteLine("\n\nProcess Complete\nPress Enter to start again\nPress Q or Escape to exit");
+            key = Console.ReadKey().Key;
         }
-        RegisterFile();
-        DataProcessing();
+        if (key != ConsoleKey.Q && key != ConsoleKey.Escape)
+        {
+            Console.WriteLine("Goodbye!");
+            return;
+        };
+        Run();
 
     }
 
@@ -29,7 +43,8 @@ internal class Program
         if (_path != null)
         {
             _excelFiles = new List<ExcelFile>();
-            new RegisterFileService(_excelFiles, _path);
+            IDataProcessing services = new RegisterFileService(_excelFiles, _path);
+            services.Process();
 
         }
 
@@ -45,10 +60,8 @@ internal class Program
         foreach (ExcelFile file in _excelFiles)
         {
 
-            // to do extracted data must be separated for each ExcelFiles
             IDataProcessing services = new DataExtractionServices(file);
             services.Process();
-
             services = new DataTransformServices(); // temp
         }
 
