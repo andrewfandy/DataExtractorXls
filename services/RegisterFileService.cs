@@ -7,9 +7,9 @@ namespace DataExtractorXls;
 
 public class RegisterFileService : IDataProcessing
 {
-    private List<ExcelFile>? _excelFiles;
+    private List<ExcelFile> _excelFiles;
     private string _inputPath;
-    public RegisterFileService(List<ExcelFile>? excelFiles, string path)
+    public RegisterFileService(List<ExcelFile> excelFiles, string path)
     {
         _inputPath = path;
         _excelFiles = excelFiles;
