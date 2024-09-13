@@ -1,6 +1,4 @@
-﻿using NPOI.SS.UserModel;
-
-namespace DataExtractorXls;
+﻿namespace DataExtractorXls;
 
 internal class Program
 {
