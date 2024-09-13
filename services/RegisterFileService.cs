@@ -1,5 +1,4 @@
 using NPOI.HSSF.UserModel;
-using NPOI.POIFS.Crypt;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 
@@ -7,9 +6,9 @@ namespace DataExtractorXls;
 
 public class RegisterFileService : IDataProcessing
 {
-    private List<ExcelFile>? _excelFiles;
+    private List<ExcelFile> _excelFiles;
     private string _inputPath;
-    public RegisterFileService(List<ExcelFile>? excelFiles, string path)
+    public RegisterFileService(List<ExcelFile> excelFiles, string path)
     {
         _inputPath = path;
         _excelFiles = excelFiles;
