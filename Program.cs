@@ -55,12 +55,15 @@ internal class Program
             return;
         }
 
+        IDataProcessing services;
+
         foreach (ExcelFile file in _excelFiles)
         {
-            ExtractedData extractedData = new ExtractedData();
-            IDataProcessing services = new DataExtractionServices(file, extractedData);
+            services = new DataExtractionServices(file);
             services.Process();
-            services = new DataTransformServices(); // temp
+
+            services = new DataTransformServices(file.ExtractedDataList);
+            services.Process();
         }
 
 
