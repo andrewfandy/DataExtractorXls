@@ -9,7 +9,6 @@ public class ExcelFile
     public ISheet Sheet { get; set; }
     public string FileType { get; set; }
 
-    public List<ICell> ExtractedContent { get; set; }
 
 
     public ExcelFile(string filePath, IWorkbook workbook)
@@ -18,7 +17,6 @@ public class ExcelFile
         Workbook = workbook;
         Sheet = Workbook.GetSheetAt(0); // set null is the first sheet
         FileType = filePath.EndsWith(".xlsx") ? ".xlsx" : ".xls";
-        ExtractedContent = new List<ICell>();
     }
 
     public override string ToString()

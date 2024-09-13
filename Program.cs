@@ -54,10 +54,11 @@ internal class Program
             Console.WriteLine("No Excel files found in the directory.");
             return;
         }
+
         foreach (ExcelFile file in _excelFiles)
         {
-
-            IDataProcessing services = new DataExtractionServices(file);
+            ExtractedData extractedData = new ExtractedData();
+            IDataProcessing services = new DataExtractionServices(file, extractedData);
             services.Process();
             services = new DataTransformServices(); // temp
         }
