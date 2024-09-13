@@ -64,8 +64,10 @@ internal class Program
 
             services = new DataTransformServices(file.ExtractedDataList);
             services.Process();
-        }
 
+            string json = ((DataTransformServices)services).json;
+            Console.WriteLine(json);
+        }
 
     }
 }
