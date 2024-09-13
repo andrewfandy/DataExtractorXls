@@ -8,12 +8,12 @@ public class DataExtractionServices : IDataProcessing
 {
     private ExcelFile? _excelFile;
     private ExtractedData? _extractedData;
-    public DataExtractionServices(ExcelFile excelFile, ExtractedData extractedData)
+    public DataExtractionServices(ExcelFile excelFile)
     {
         if (excelFile != null)
         {
             _excelFile = excelFile;
-            _extractedData = extractedData;
+            _extractedData = new ExtractedData();
         }
     }
 

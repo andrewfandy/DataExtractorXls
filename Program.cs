@@ -57,8 +57,7 @@ internal class Program
 
         foreach (ExcelFile file in _excelFiles)
         {
-            ExtractedData extractedData = new ExtractedData();
-            IDataProcessing services = new DataExtractionServices(file, extractedData);
+            IDataProcessing services = new DataExtractionServices(file);
             services.Process();
             services = new DataTransformServices(); // temp
         }
