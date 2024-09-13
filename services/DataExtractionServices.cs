@@ -52,27 +52,12 @@ public class DataExtractionServices : IDataProcessing
                 _extractedData?.field?.Add(fieldCell2!);
                 _extractedData?.value?.Add(valueCell2!);
             }
-            Console.WriteLine(_extractedData?.Count);
-            // int maxCells = 10; // maximum column extraction
-            // for (int cellIndex = index; cellIndex < maxCells; cellIndex++)
-            // {
-            //     ICell cell = row.GetCell(cellIndex);
-            //     if (cell != null && cell.CellType != CellType.Blank)
-            //     {
-            //         switch (dataType)
-            //         {
-            //             case ExtractedDataType.Field:
-            //                 extractedData?.field?.Add(cell);
-            //                 break;
-            //             case ExtractedDataType.Value:
-            //                 extractedData?.value?.Add(cell);
-            //                 break;
-            //         }
-
-            //     }
-            // }
         }
-        if (_extractedData != null) Console.WriteLine($"Extraction Completed\nTotal Extracted: {_extractedData.Count}");
+        if (_extractedData != null)
+        {
+            _excelFile!.ExtractedDataList = new List<ExtractedData>() { _extractedData };
+            Console.WriteLine($"Extraction Completed\nTotal Extracted: {_extractedData.Count}");
+        }
 
 
     }
