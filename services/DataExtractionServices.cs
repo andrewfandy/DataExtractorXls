@@ -1,4 +1,3 @@
-using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
 
 namespace DataExtractorXls;
@@ -21,14 +20,15 @@ public class DataExtractionServices : IDataProcessing
 
     public void Process()
     {
+
         if (_excelFile == null)
         {
             Console.WriteLine("No excel files found");
+            return;
         }
+        Console.WriteLine($"\n\nExtracting: {_excelFile.Path}");
 
-        Console.WriteLine($"\n\nExtracting: {_excelFile?.Path}");
-
-        using (FileStream fs = new FileStream(_excelFile?.Path, FileMode.Open, FileAccess.Read))
+        using (FileStream fs = new FileStream(_excelFile.Path, FileMode.Open, FileAccess.Read))
         {
             ISheet? sheet = _excelFile.Sheet;
             int startRow = 9;

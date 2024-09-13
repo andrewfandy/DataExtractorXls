@@ -4,7 +4,7 @@ namespace DataExtractorXls;
 
 public class ExcelFile
 {
-    public string? Path { get; set; }
+    public string Path { get; set; }
     public IWorkbook Workbook { get; set; }
     public ISheet? Sheet { get; set; }
     public string FileType { get; set; }
