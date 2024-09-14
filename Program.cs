@@ -62,11 +62,11 @@ internal class Program
             services = new DataExtractionServices(file);
             services.Process();
 
-            services = new DataTransformServices(file.ExtractedDataList);
-            services.Process();
+            // services = new DataTransformServices(file.ExtractedDataList);
+            // services.Process();
 
-            string json = ((DataTransformServices)services).json;
-            Console.WriteLine(json);
+            // string json = ((DataTransformServices)services).json;
+            // Console.WriteLine(json);
         }
 
     }

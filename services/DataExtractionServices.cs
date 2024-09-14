@@ -7,16 +7,33 @@ namespace DataExtractorXls;
 public class DataExtractionServices : IDataProcessing
 {
     private ExcelFile? _excelFile;
-    private ExtractedData? _extractedData;
+    // private ExtractedData? _extractedData;
     public DataExtractionServices(ExcelFile excelFile)
     {
         if (excelFile != null)
         {
             _excelFile = excelFile;
-            _extractedData = new ExtractedData();
+            // _extractedData = new ExtractedData();
         }
     }
+    private object GetValueCellType(ICell cell)
+    {
 
+        if (cell.CellType == CellType.String) return cell.StringCellValue;
+        if (cell.CellType == CellType.Numeric)
+        {
+            if (DateUtil.IsCellDateFormatted(cell))
+            {
+                return cell.DateCellValue!;
+            }
+
+            return cell.NumericCellValue;
+        }
+        if (cell.CellType == CellType.Boolean) return cell.BooleanCellValue;
+
+
+        return string.Empty;
+    }
     private void Extract(ISheet sheet)
     {
 
@@ -38,25 +55,33 @@ public class DataExtractionServices : IDataProcessing
             ICell valueCell1 = row.GetCell(3);
             ICell valueCell2 = row.GetCell(5);
 
+            Dictionary<string, object> pairs = new Dictionary<string, object>();
 
+            string key;
+            object val;
             if (fieldCell1 != null && fieldCell1.CellType != CellType.Blank &&
             valueCell1 != null && valueCell1.CellType != CellType.Blank)
             {
-                _extractedData?.field?.Add(fieldCell1!);
-                _extractedData?.value?.Add(valueCell1!);
-
+                key = fieldCell1.ToString()!;
+                val = GetValueCellType(valueCell1);
+                pairs.Add(key, val);
+                _excelFile?.ExtractedDataList.Add(pairs);
             }
             if (fieldCell2 != null && fieldCell2.CellType != CellType.Blank &&
             valueCell2 != null && valueCell2.CellType != CellType.Blank)
             {
-                _extractedData?.field?.Add(fieldCell2!);
-                _extractedData?.value?.Add(valueCell2!);
+                key = fieldCell2.ToString()!;
+                val = GetValueCellType(valueCell2);
+                pairs.Add(key, val);
+                _excelFile?.ExtractedDataList.Add(pairs);
+
+
             }
         }
-        if (_extractedData != null)
+        if (_excelFile?.ExtractedDataList != null)
         {
-            _excelFile!.ExtractedDataList = new List<ExtractedData>() { _extractedData };
-            Console.WriteLine($"Extraction Completed\nTotal Extracted: {_extractedData.Count}");
+
+            Console.WriteLine($"Extraction Completed\nTotal Extracted: {_excelFile?.ExtractedDataList.Count}");
         }
 
 
