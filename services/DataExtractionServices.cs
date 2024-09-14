@@ -38,7 +38,7 @@ public class DataExtractionServices : IDataProcessing
 
         return string.Empty;
     }
-    private void Extract(ISheet sheet, List<Dictionary<string, object>> list)
+    private void Extract(ISheet sheet)
     {
 
         if (sheet == null || _excelFile == null)
@@ -96,13 +96,12 @@ public class DataExtractionServices : IDataProcessing
         }
         Console.WriteLine($"\n\nExtracting: {_excelFile.Path}");
 
-        List<Dictionary<string, object>> list = new List<Dictionary<string, object>>();
         using (new FileStream(_excelFile.Path, FileMode.Open, FileAccess.Read))
         {
             ISheet? sheet = _excelFile.Sheet;
 
             // Extracting Data
-            Extract(sheet, list);
+            Extract(sheet);
 
         }
 
