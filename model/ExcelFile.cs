@@ -8,7 +8,7 @@ public class ExcelFile
     public IWorkbook Workbook { get; set; }
     public ISheet Sheet { get; set; }
     public string FileType { get; set; }
-    public List<Dictionary<string, object>> ExtractedDataList { get; set; }
+    public Dictionary<string, object> ExtractedDataList { get; set; }
 
 
 
@@ -18,7 +18,7 @@ public class ExcelFile
         Workbook = workbook;
         Sheet = Workbook.GetSheetAt(0); // set null is the first sheet
         FileType = filePath.EndsWith(".xlsx") ? ".xlsx" : ".xls";
-        ExtractedDataList = new List<Dictionary<string, object>>();
+        ExtractedDataList = new Dictionary<string, object>();
     }
 
     public override string ToString()

@@ -1,5 +1,7 @@
+using NPOI.HSSF.Record.PivotTable;
 using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
+using Org.BouncyCastle.X509.Store;
 
 namespace DataExtractorXls;
 
@@ -7,13 +9,15 @@ namespace DataExtractorXls;
 public class DataExtractionServices : IDataProcessing
 {
     private ExcelFile? _excelFile;
+    private Dictionary<string, object>? _pairs;
+
     // private ExtractedData? _extractedData;
     public DataExtractionServices(ExcelFile excelFile)
     {
         if (excelFile != null)
         {
             _excelFile = excelFile;
-            // _extractedData = new ExtractedData();
+            _pairs = _excelFile.ExtractedDataList;
         }
     }
     private object GetValueCellType(ICell cell)
@@ -34,16 +38,17 @@ public class DataExtractionServices : IDataProcessing
 
         return string.Empty;
     }
-    private void Extract(ISheet sheet)
+    private void Extract(ISheet sheet, List<Dictionary<string, object>> list)
     {
 
-        if (sheet == null)
+        if (sheet == null || _excelFile == null)
         {
             Console.WriteLine("No sheets found!");
             return;
         }
         int startRow = 9;
         int maxRows = 100;
+
         for (int rowIndex = startRow; rowIndex < maxRows; rowIndex++)
         {
             IRow row = sheet.GetRow(rowIndex);
@@ -55,7 +60,6 @@ public class DataExtractionServices : IDataProcessing
             ICell valueCell1 = row.GetCell(3);
             ICell valueCell2 = row.GetCell(5);
 
-            Dictionary<string, object> pairs = new Dictionary<string, object>();
 
             string key;
             object val;
@@ -64,23 +68,19 @@ public class DataExtractionServices : IDataProcessing
             {
                 key = fieldCell1.ToString()!;
                 val = GetValueCellType(valueCell1);
-                pairs.Add(key, val);
-                _excelFile?.ExtractedDataList.Add(pairs);
+                _pairs!.Add(key, val);
             }
             if (fieldCell2 != null && fieldCell2.CellType != CellType.Blank &&
             valueCell2 != null && valueCell2.CellType != CellType.Blank)
             {
                 key = fieldCell2.ToString()!;
                 val = GetValueCellType(valueCell2);
-                pairs.Add(key, val);
-                _excelFile?.ExtractedDataList.Add(pairs);
-
-
+                _pairs!.Add(key, val);
             }
         }
-        if (_excelFile?.ExtractedDataList != null)
-        {
 
+        if (_excelFile.ExtractedDataList != null)
+        {
             Console.WriteLine($"Extraction Completed\nTotal Extracted: {_excelFile?.ExtractedDataList.Count}");
         }
 
@@ -96,14 +96,16 @@ public class DataExtractionServices : IDataProcessing
         }
         Console.WriteLine($"\n\nExtracting: {_excelFile.Path}");
 
+        List<Dictionary<string, object>> list = new List<Dictionary<string, object>>();
         using (new FileStream(_excelFile.Path, FileMode.Open, FileAccess.Read))
         {
             ISheet? sheet = _excelFile.Sheet;
 
             // Extracting Data
-            Extract(sheet);
+            Extract(sheet, list);
 
         }
+
     }
 
 }

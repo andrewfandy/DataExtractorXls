@@ -4,7 +4,8 @@ internal class Program
 {
 
     private static List<ExcelFile>? _excelFiles;
-    private static string? _path;
+    // private static string? _path;
+    private static string? _path = @"C:\Users\andre\OneDrive\Projects\DataExtractionSln\data\excellence";
     static void Main(string[] args)
     {
         Run();
@@ -22,7 +23,7 @@ internal class Program
             if (key == ConsoleKey.Enter)
             {
                 Console.WriteLine("\n\nInput the folder path: ");
-                _path = Console.ReadLine();
+                _path = _path == null ? Console.ReadLine() : _path;
                 RegisterFile();
                 DataProcessing();
 
@@ -62,12 +63,10 @@ internal class Program
             services = new DataExtractionServices(file);
             services.Process();
 
-            // services = new DataTransformServices(file.ExtractedDataList);
-            // services.Process();
-
-            // string json = ((DataTransformServices)services).json;
-            // Console.WriteLine(json);
+            services = new DataTransformServices(file);
+            services.Process();
+            string json = ((DataTransformServices)services).json!;
+            Console.WriteLine(json);
         }
-
     }
 }
