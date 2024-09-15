@@ -5,28 +5,27 @@ namespace DataExtractorXls;
 
 public class DataTransformServices : IDataProcessing
 {
-    public string? json { get; set; }
-    private ExcelFile _file;
-    public DataTransformServices(ExcelFile file)
+    public string? Json { get; set; }
+    private Dictionary<string, object>? _data;
+    public DataTransformServices(Dictionary<string, object> data)
     {
-        _file = file;
-
+        if (data != null)
+            _data = data;
     }
 
     private void Transform(Dictionary<string, object> data)
     {
 
-        json = JsonConvert.SerializeObject(data, Formatting.Indented);
+        Json = JsonConvert.SerializeObject(data, Formatting.Indented);
 
     }
     public void Process()
     {
-        if (_file == null)
+        if (_data == null)
         {
-            Console.WriteLine("Excel File is null");
+            Console.WriteLine("A key value pairs needed");
             return;
         }
-        var data = _file.ExtractedDataList;
-        Transform(data);
+        Transform(_data);
     }
 }
