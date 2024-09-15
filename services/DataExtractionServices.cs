@@ -1,3 +1,4 @@
+using System.Text;
 using NPOI.HSSF.Record.PivotTable;
 using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
@@ -19,6 +20,22 @@ public class DataExtractionServices : IDataProcessing
             _excelFile = excelFile;
             _pairs = _excelFile.ExtractedDataList;
         }
+    }
+
+
+    private string KeyPunctuationRemover(string key)
+    {
+        if (string.IsNullOrEmpty(key))
+        {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        foreach (char ch in key)
+        {
+
+            sb.Append(!char.IsPunctuation(ch) ? ch : "");
+        }
+        return sb.ToString().Trim();
     }
     private object GetValueCellType(ICell cell)
     {
@@ -66,14 +83,14 @@ public class DataExtractionServices : IDataProcessing
             if (fieldCell1 != null && fieldCell1.CellType != CellType.Blank &&
             valueCell1 != null && valueCell1.CellType != CellType.Blank)
             {
-                key = fieldCell1.ToString()!;
+                key = KeyPunctuationRemover(fieldCell1.ToString()!);
                 val = GetValueCellType(valueCell1);
                 _pairs!.Add(key, val);
             }
             if (fieldCell2 != null && fieldCell2.CellType != CellType.Blank &&
             valueCell2 != null && valueCell2.CellType != CellType.Blank)
             {
-                key = fieldCell2.ToString()!;
+                key = KeyPunctuationRemover(fieldCell2.ToString()!);
                 val = GetValueCellType(valueCell2);
                 _pairs!.Add(key, val);
             }
@@ -81,7 +98,7 @@ public class DataExtractionServices : IDataProcessing
 
         if (_excelFile.ExtractedDataList != null)
         {
-            Console.WriteLine($"Extraction Completed\nTotal Extracted: {_excelFile?.ExtractedDataList.Count}");
+            Console.WriteLine($"\n\nExtraction Completed\nTotal Extracted: {_excelFile?.ExtractedDataList.Count}");
         }
 
 
