@@ -4,8 +4,8 @@ internal class Program
 {
 
     private static List<ExcelFile>? _excelFiles;
-    // private static string? _path;
-    private static string? _path = @"C:\Users\andre\OneDrive\Projects\DataExtractionSln\data\excellence";
+    private static string? _path;
+    // private static string? _path = @"C:\Users\andre\OneDrive\Projects\DataExtractionSln\data\excellence";
     static void Main(string[] args)
     {
         Run();
