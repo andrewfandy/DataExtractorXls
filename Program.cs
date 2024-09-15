@@ -56,16 +56,15 @@ internal class Program
             return;
         }
 
-        IDataProcessing services;
 
         foreach (ExcelFile file in _excelFiles)
         {
-            services = new DataExtractionServices(file);
-            services.Process();
+            var extract = new DataExtractionServices(file);
+            extract.Process();
 
-            services = new DataTransformServices(file);
-            services.Process();
-            string json = ((DataTransformServices)services).json!;
+            var transform = new DataTransformServices(extract.ExtractedData!);
+            transform.Process();
+            string json = transform.Json!;
             Console.WriteLine(json);
         }
     }

@@ -8,7 +8,6 @@ public class ExcelFile
     public IWorkbook Workbook { get; set; }
     public ISheet Sheet { get; set; }
     public string FileType { get; set; }
-    public Dictionary<string, object> ExtractedDataList { get; set; }
 
 
 
@@ -17,8 +16,7 @@ public class ExcelFile
         Path = filePath;
         Workbook = workbook;
         Sheet = Workbook.GetSheetAt(0); // set null is the first sheet
-        FileType = filePath.EndsWith(".xlsx") ? ".xlsx" : ".xls";
-        ExtractedDataList = new Dictionary<string, object>();
+        FileType = Path.EndsWith(".xlsx") ? ".xlsx" : ".xls";
     }
 
     public override string ToString()
@@ -26,7 +24,7 @@ public class ExcelFile
         if (Path != null)
         {
             string[] split = Path.Split(@"\");
-            return $"File Path: {split.Last()}";
+            return split.Last();
         }
         return "";
     }
