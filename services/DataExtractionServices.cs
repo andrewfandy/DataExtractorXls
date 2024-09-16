@@ -1,8 +1,5 @@
 using System.Text;
-using NPOI.HSSF.Record.PivotTable;
-using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
-using Org.BouncyCastle.X509.Store;
 
 namespace DataExtractorXls;
 
@@ -10,15 +7,14 @@ namespace DataExtractorXls;
 public class DataExtractionServices : IDataProcessing
 {
     private ExcelFile? _excelFile;
-    private Dictionary<string, object>? _pairs;
+    public Dictionary<string, object>? ExtractedData { get; set; }
 
-    // private ExtractedData? _extractedData;
     public DataExtractionServices(ExcelFile excelFile)
     {
         if (excelFile != null)
         {
             _excelFile = excelFile;
-            _pairs = _excelFile.ExtractedDataList;
+            ExtractedData = new Dictionary<string, object>();
         }
     }
 
@@ -60,7 +56,7 @@ public class DataExtractionServices : IDataProcessing
 
         if (sheet == null || _excelFile == null)
         {
-            Console.WriteLine("No sheets found!");
+            Console.WriteLine("File not found!");
             return;
         }
         int startRow = 9;
@@ -85,20 +81,20 @@ public class DataExtractionServices : IDataProcessing
             {
                 key = KeyPunctuationRemover(fieldCell1.ToString()!);
                 val = GetValueCellType(valueCell1);
-                _pairs!.Add(key, val);
+                ExtractedData!.Add(key, val);
             }
             if (fieldCell2 != null && fieldCell2.CellType != CellType.Blank &&
             valueCell2 != null && valueCell2.CellType != CellType.Blank)
             {
                 key = KeyPunctuationRemover(fieldCell2.ToString()!);
                 val = GetValueCellType(valueCell2);
-                _pairs!.Add(key, val);
+                ExtractedData!.Add(key, val);
             }
         }
 
-        if (_excelFile.ExtractedDataList != null)
+        if (ExtractedData != null)
         {
-            Console.WriteLine($"\n\nExtraction Completed\nTotal Extracted: {_excelFile?.ExtractedDataList.Count}");
+            Console.WriteLine($"\n\nExtraction Completed\nTotal Extracted: {ExtractedData.Count}");
         }
 
 
