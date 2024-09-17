@@ -38,10 +38,7 @@ public class RegisterFileService : IDataProcessing
             if (_excelFiles == null)
             {
                 Console.WriteLine("No Excel files found in the directory.");
-
             }
-            Console.WriteLine($"\nExcel files registered\nTotal file(s): {_excelFiles?.Count()} ");
-
 
         }
         catch (FileNotFoundException fnfe)

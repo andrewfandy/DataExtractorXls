@@ -7,7 +7,7 @@ namespace DataExtractorXls;
 public class DataExtractionServices : IDataProcessing
 {
     private ExcelFile? _excelFile;
-    public Dictionary<string, object>? ExtractedData { get; set; }
+    private Dictionary<string, object>? ExtractedData { get; set; }
 
     public DataExtractionServices(ExcelFile excelFile)
     {
@@ -91,13 +91,6 @@ public class DataExtractionServices : IDataProcessing
                 ExtractedData!.Add(key, val);
             }
         }
-
-        if (ExtractedData != null)
-        {
-            Console.WriteLine($"\n\nExtraction Completed\nTotal Extracted: {ExtractedData.Count}");
-        }
-
-
     }
     public void Process()
     {
