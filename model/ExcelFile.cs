@@ -9,6 +9,8 @@ public class ExcelFile
     public ISheet Sheet { get; set; }
     public string FileType { get; set; }
 
+    public Dictionary<string, object>? ExtractedData;
+
 
 
     public ExcelFile(string filePath, IWorkbook workbook)
@@ -17,9 +19,10 @@ public class ExcelFile
         Workbook = workbook;
         Sheet = Workbook.GetSheetAt(0); // set null is the first sheet
         FileType = Path.EndsWith(".xlsx") ? ".xlsx" : ".xls";
+        ExtractedData = new Dictionary<string, object>();
     }
 
-    public override string ToString()
+    public string FileName()
     {
         if (Path != null)
         {
