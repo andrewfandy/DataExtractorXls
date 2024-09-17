@@ -1,11 +1,13 @@
+using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 
 namespace DataExtractorXls;
 
 public class ExcelFile
 {
     public string Path { get; set; }
-    public IWorkbook Workbook { get; set; }
+    public IWorkbook Workbook { get; }
     public ISheet Sheet { get; set; }
     public string FileType { get; set; }
 
@@ -13,13 +15,21 @@ public class ExcelFile
 
 
 
-    public ExcelFile(string filePath, IWorkbook workbook)
+    public ExcelFile(string filePath)
     {
         Path = filePath;
-        Workbook = workbook;
-        Sheet = Workbook.GetSheetAt(0); // set null is the first sheet
+        Workbook = workbookRegistered();
+        Sheet = Workbook.GetSheetAt(0); // 0 is default
         FileType = Path.EndsWith(".xlsx") ? ".xlsx" : ".xls";
         ExtractedData = new Dictionary<string, object>();
+    }
+
+    private IWorkbook workbookRegistered()
+    {
+        using (FileStream fs = new FileStream(Path, FileMode.Open, FileAccess.Read))
+        {
+            return Path.EndsWith(".xlsx") ? new XSSFWorkbook(fs) : new HSSFWorkbook(fs);
+        }
     }
 
     public string FileName()
