@@ -25,7 +25,7 @@ internal class Program
                 Console.WriteLine("\n\nInput the folder path: ");
                 _path = _path == null ? Console.ReadLine() : _path;
                 RegisterFile();
-                DataProcessing();
+                DataExtract();
 
                 Console.WriteLine("\n\nProcess Complete\nPress Enter to start again\nPress Q or Escape to exit");
                 key = Console.ReadKey(intercept: true).Key;
@@ -37,35 +37,46 @@ internal class Program
     }
     private static void RegisterFile()
     {
-
-        if (_path != null)
+        if (_path == null)
         {
-            _excelFiles = new List<ExcelFile>();
-            IDataProcessing services = new RegisterFileService(_excelFiles, _path);
-            services.Process();
-
+            Console.WriteLine("Failed to register\nPath is unavai");
+            return;
         }
-
+        _excelFiles = new List<ExcelFile>();
+        var services = new RegisterFileService(_excelFiles, _path);
+        services.Process();
+        if (_excelFiles != null) Console.WriteLine($"Register Completed\nTotal Files: {_excelFiles.Count}");
     }
-    private static void DataProcessing()
+    private static void DataExtract()
     {
-
         if (_excelFiles == null)
         {
             Console.WriteLine("No Excel files found in the directory.");
             return;
         }
 
-
         foreach (ExcelFile file in _excelFiles)
         {
             var extract = new DataExtractionServices(file);
             extract.Process();
-
-            var transform = new DataTransformServices(extract.ExtractedData!);
-            transform.Process();
-            string json = transform.Json!;
-            Console.WriteLine(json);
         }
+    }
+    private static void DataTransform()
+    {
+        if (_excelFiles == null)
+        {
+            Console.WriteLine("No Excel files found in the directory.");
+            return;
+        }
+        foreach (ExcelFile file in _excelFiles)
+        {
+            if (file.ExtractedData == null) continue;
+            var transform = new DataTransformServices(file.ExtractedData);
+            transform.Process();
+        }
+    }
+    private static void DataLoad()
+    {
+
     }
 }
