@@ -91,8 +91,6 @@ public class DataExtractionServices : IDataProcessing
                 ExtractedData!.Add(key, val);
             }
         }
-        if (ExtractedData != null)
-            _excelFile.ExtractedData?.Add(_excelFile.FileName(), ExtractedData);
     }
     public void Process()
     {
