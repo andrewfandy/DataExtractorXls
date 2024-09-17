@@ -1,5 +1,4 @@
 using Newtonsoft.Json;
-using NPOI.SS.UserModel;
 
 namespace DataExtractorXls;
 
@@ -15,7 +14,6 @@ public class DataTransformServices : IDataProcessing
 
     private void Transform(Dictionary<string, object> data)
     {
-
         Json = JsonConvert.SerializeObject(data, Formatting.Indented);
 
     }
