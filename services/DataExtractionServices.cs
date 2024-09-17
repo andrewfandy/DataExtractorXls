@@ -7,19 +7,18 @@ namespace DataExtractorXls;
 public class DataExtractionServices : IDataProcessing
 {
     private ExcelFile? _excelFile;
-    private Dictionary<string, object>? ExtractedData { get; set; }
+    private Dictionary<string, object>? ExtractedData;
 
     public DataExtractionServices(ExcelFile excelFile)
     {
         if (excelFile != null)
         {
             _excelFile = excelFile;
-            ExtractedData = new Dictionary<string, object>();
+            ExtractedData = _excelFile.ExtractedData;
         }
     }
 
-
-    private string KeyPunctuationRemover(string key)
+    private string KeyCleaning(string key)
     {
         if (string.IsNullOrEmpty(key))
         {
@@ -79,14 +78,14 @@ public class DataExtractionServices : IDataProcessing
             if (fieldCell1 != null && fieldCell1.CellType != CellType.Blank &&
             valueCell1 != null && valueCell1.CellType != CellType.Blank)
             {
-                key = KeyPunctuationRemover(fieldCell1.ToString()!);
+                key = KeyCleaning(fieldCell1.ToString()!);
                 val = GetValueCellType(valueCell1);
                 ExtractedData!.Add(key, val);
             }
             if (fieldCell2 != null && fieldCell2.CellType != CellType.Blank &&
             valueCell2 != null && valueCell2.CellType != CellType.Blank)
             {
-                key = KeyPunctuationRemover(fieldCell2.ToString()!);
+                key = KeyCleaning(fieldCell2.ToString()!);
                 val = GetValueCellType(valueCell2);
                 ExtractedData!.Add(key, val);
             }
@@ -100,9 +99,9 @@ public class DataExtractionServices : IDataProcessing
             Console.WriteLine("No excel files found");
             return;
         }
-        Console.WriteLine($"\n\nExtracting: {_excelFile.Path}");
+        Console.WriteLine($"\n\nExtracting: {_excelFile.FilePath}");
 
-        using (new FileStream(_excelFile.Path, FileMode.Open, FileAccess.Read))
+        using (new FileStream(_excelFile.FilePath, FileMode.Open, FileAccess.Read))
         {
             ISheet? sheet = _excelFile.Sheet;
 

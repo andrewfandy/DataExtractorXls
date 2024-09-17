@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+
 namespace DataExtractorXls;
 
 
@@ -23,7 +25,7 @@ public class DataLoadServices : IDataProcessing
     }
     private void OutputFolderCreation()
     {
-        _outputPath = Path.Join(Directory.GetCurrentDirectory(), "output");
+        _outputPath = Path.Join(Directory.GetCurrentDirectory(), @"output\");
         if (!Directory.Exists(_outputPath)) Directory.CreateDirectory(_outputPath);
 
     }
@@ -33,7 +35,8 @@ public class DataLoadServices : IDataProcessing
     }
     private void LoadToJson()
     {
-        // using ()
+        string path = Path.Join(_outputPath, "test.json");
+        File.WriteAllText(path, JsonConvert.SerializeObject(_dataSet, Formatting.Indented));
     }
     private void LoadToDatabase()
     {

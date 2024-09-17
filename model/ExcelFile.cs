@@ -1,3 +1,4 @@
+using ICSharpCode.SharpZipLib.Core;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
@@ -6,7 +7,7 @@ namespace DataExtractorXls;
 
 public class ExcelFile
 {
-    public string Path { get; set; }
+    public string FilePath { get; set; }
     public IWorkbook Workbook { get; }
     public ISheet Sheet { get; set; }
     public string FileType { get; set; }
@@ -17,37 +18,29 @@ public class ExcelFile
 
     public ExcelFile(string filePath)
     {
-        Path = filePath;
+        FilePath = filePath;
         Workbook = workbookRegistered();
         Sheet = Workbook.GetSheetAt(0); // 0 is default
-        FileType = Path.EndsWith(".xlsx") ? ".xlsx" : ".xls";
+        FileType = FilePath.EndsWith(".xlsx") ? ".xlsx" : ".xls";
         ExtractedData = new Dictionary<string, object>();
     }
 
     private IWorkbook workbookRegistered()
     {
-        using (FileStream fs = new FileStream(Path, FileMode.Open, FileAccess.Read))
+        using (FileStream fs = new FileStream(FilePath, FileMode.Open, FileAccess.Read))
         {
-            return Path.EndsWith(".xlsx") ? new XSSFWorkbook(fs) : new HSSFWorkbook(fs);
+            return FilePath.EndsWith(".xlsx") ? new XSSFWorkbook(fs) : new HSSFWorkbook(fs);
         }
     }
 
     public string FileNameOnly()
     {
-        if (Path != null)
-        {
-            string[] split = Path.Split(@"\");
-            return split.Last().Split(".").First();
-        }
-        return "";
+        Console.WriteLine(Path.GetFileNameWithoutExtension(FilePath));
+        return Path.GetFileNameWithoutExtension(FilePath);
+
     }
     public string FileNameWithExtension()
     {
-        if (Path != null)
-        {
-            string[] split = Path.Split(@"\");
-            return split.Last();
-        }
-        return "";
+        return Path.GetFileName(FilePath);
     }
 }

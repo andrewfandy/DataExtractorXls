@@ -25,7 +25,7 @@ internal class Program
                 {
                     var files = RegisterFiles(path);
                     DataExtract(files);
-
+                    DataLoad(files, DataLoadServicesType.LOAD_JSON_FILE);
                     Console.WriteLine("\n\nProcess Complete\nPress Enter to start again\nPress Q or Escape to exit");
                 }
                 else
@@ -67,8 +67,13 @@ internal class Program
             transform.Process();
         }
     }
-    private static void DataLoad()
+    private static void DataLoad(List<ExcelFile> excelFiles, DataLoadServicesType type)
     {
-
+        foreach (var file in excelFiles)
+        {
+            if (file.ExtractedData == null) continue;
+            var load = new DataLoadServices(file, type);
+            load.Process();
+        }
     }
 }
