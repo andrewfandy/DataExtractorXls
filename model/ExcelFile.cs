@@ -32,7 +32,16 @@ public class ExcelFile
         }
     }
 
-    public string FileName()
+    public string FileNameOnly()
+    {
+        if (Path != null)
+        {
+            string[] split = Path.Split(@"\");
+            return split.Last().Split(".").First();
+        }
+        return "";
+    }
+    public string FileNameWithExtension()
     {
         if (Path != null)
         {
