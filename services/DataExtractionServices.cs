@@ -30,7 +30,7 @@ public class DataExtractionServices : IDataProcessing
 
             sb.Append(!char.IsPunctuation(ch) ? ch : "");
         }
-        return sb.ToString().Trim();
+        return sb.ToString().Trim().ToLower().Replace(" ", "_");
     }
     private object GetValueCellType(ICell cell)
     {
@@ -99,8 +99,6 @@ public class DataExtractionServices : IDataProcessing
             Console.WriteLine("No excel files found");
             return;
         }
-        Console.WriteLine($"\n\nExtracting: {_excelFile.FilePath}");
-
         using (new FileStream(_excelFile.FilePath, FileMode.Open, FileAccess.Read))
         {
             ISheet? sheet = _excelFile.Sheet;

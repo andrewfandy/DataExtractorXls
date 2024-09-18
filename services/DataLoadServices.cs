@@ -15,19 +15,23 @@ public class DataLoadServices : IDataProcessing
     private Dictionary<string, object>? _dataSet;
     private DataLoadServicesType _loadType;
     private string? _outputPath;
+    private string? _outputDirName;
 
-    public DataLoadServices(ExcelFile file, DataLoadServicesType loadType)
+    public DataLoadServices(ExcelFile file, DataLoadServicesType loadType, string outputDirName)
     {
         _file = file;
         _dataSet = file.ExtractedData;
         _loadType = loadType;
+        _outputDirName = outputDirName;
         OutputFolderCreation();
     }
     private void OutputFolderCreation()
     {
-        _outputPath = Path.Join(Directory.GetCurrentDirectory(), @"output\");
-        if (!Directory.Exists(_outputPath)) Directory.CreateDirectory(_outputPath);
-
+        _outputPath = Path.Join(Directory.GetCurrentDirectory(), "output", _outputDirName);
+        if (!Directory.Exists(_outputPath))
+        {
+            Directory.CreateDirectory(_outputPath);
+        };
     }
     private void LoadToXml()
     {
@@ -35,7 +39,8 @@ public class DataLoadServices : IDataProcessing
     }
     private void LoadToJson()
     {
-        string path = Path.Join(_outputPath, "test.json");
+        string excelFileName = _file!.FileNameOnly().Split().First();
+        string path = Path.Join(_outputPath, excelFileName + ".json");
         File.WriteAllText(path, JsonConvert.SerializeObject(_dataSet, Formatting.Indented));
     }
     private void LoadToDatabase()
