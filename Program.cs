@@ -69,10 +69,17 @@ internal class Program
     }
     private static void DataLoad(List<ExcelFile> excelFiles, DataLoadServicesType type)
     {
+        string input = "";
+        while (string.IsNullOrEmpty(input))
+        {
+            Console.WriteLine("\nInput the output directory name (the output still on the 'output' directory):");
+            input = Console.ReadLine()!;
+        }
+
         foreach (var file in excelFiles)
         {
             if (file.ExtractedData == null) continue;
-            var load = new DataLoadServices(file, type);
+            var load = new DataLoadServices(file, type, input);
             load.Process();
         }
     }
