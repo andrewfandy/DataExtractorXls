@@ -30,7 +30,7 @@ public class DataExtractionServices : IDataProcessing
 
             sb.Append(!char.IsPunctuation(ch) ? ch : "");
         }
-        return sb.ToString().Trim();
+        return sb.ToString().Trim().ToLower().Replace(" ", "_");
     }
     private object GetValueCellType(ICell cell)
     {
