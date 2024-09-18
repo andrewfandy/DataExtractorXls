@@ -25,6 +25,14 @@ public class DataLoadServices : IDataProcessing
         _outputDirName = outputDirName;
         OutputFolderCreation();
     }
+    public DataLoadServices(Dictionary<string, object> dataSet, DataLoadServicesType loadType, string outputDirName)
+    {
+        _file = null;
+        _dataSet = dataSet;
+        _loadType = loadType;
+        _outputDirName = outputDirName;
+        OutputFolderCreation();
+    }
     private void OutputFolderCreation()
     {
         _outputPath = Path.Join(Directory.GetCurrentDirectory(), "output", _outputDirName);
@@ -39,8 +47,8 @@ public class DataLoadServices : IDataProcessing
     }
     private void LoadToJson()
     {
-        string excelFileName = _file!.FileNameOnly().Split().First();
-        string path = Path.Join(_outputPath, excelFileName + ".json");
+        string jsonFileName = _file != null ? _file!.FileNameOnly().Split().First() : "output";
+        string path = Path.Join(_outputPath, jsonFileName + ".json");
         File.WriteAllText(path, JsonConvert.SerializeObject(_dataSet, Formatting.Indented));
     }
     private void LoadToDatabase()
