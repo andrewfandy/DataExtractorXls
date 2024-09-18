@@ -6,13 +6,12 @@ namespace DataExtractorXls;
 
 public class RegisterFileService : IDataProcessing
 {
-    private List<ExcelFile> _excelFiles;
+    public List<ExcelFile>? ExcelFiles { get; set; }
     private string _inputPath;
-    public RegisterFileService(List<ExcelFile> excelFiles, string path)
+    public RegisterFileService(string path)
     {
         _inputPath = path;
-        _excelFiles = excelFiles;
-
+        ExcelFiles = new List<ExcelFile>();
     }
 
     public void Process()
@@ -21,23 +20,14 @@ public class RegisterFileService : IDataProcessing
         {
             Console.WriteLine($"Registering Files in {_inputPath}");
             string[] files = Directory.GetFiles(_inputPath);
+
             if (files.Length < 1)
             {
                 throw new FileNotFoundException();
             }
             foreach (string file in files)
             {
-                IWorkbook workbook;
-                using (FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read))
-                {
-                    workbook = file.EndsWith(".xlsx") ? new XSSFWorkbook(fs) : new HSSFWorkbook(fs);
-                }
-                _excelFiles?.Add(new ExcelFile(file, workbook));
-            }
-
-            if (_excelFiles == null)
-            {
-                Console.WriteLine("No Excel files found in the directory.");
+                ExcelFiles!.Add(new ExcelFile(file));
             }
 
         }

@@ -3,9 +3,6 @@
 internal class Program
 {
 
-    private static List<ExcelFile>? _excelFiles;
-    private static string? _path;
-    // private static string? _path = @"C:\Users\andre\OneDrive\Projects\DataExtractionSln\data\excellence";
     static void Main(string[] args)
     {
         Run();
@@ -23,11 +20,18 @@ internal class Program
             if (key == ConsoleKey.Enter)
             {
                 Console.WriteLine("\n\nInput the folder path: ");
-                _path = _path == null ? Console.ReadLine() : _path;
-                RegisterFile();
-                DataExtract();
-
-                Console.WriteLine("\n\nProcess Complete\nPress Enter to start again\nPress Q or Escape to exit");
+                var path = Console.ReadLine();
+                if (!string.IsNullOrEmpty(path))
+                {
+                    var files = RegisterFiles(path);
+                    DataExtract(files);
+                    DataLoad(files, DataLoadServicesType.LOAD_JSON_FILE);
+                    Console.WriteLine("\n\nProcess Complete\nPress Enter to start again\nPress Q or Escape to exit");
+                }
+                else
+                {
+                    Console.WriteLine("Path is null or empty");
+                }
                 key = Console.ReadKey(intercept: true).Key;
 
 
@@ -35,48 +39,41 @@ internal class Program
         } while (key != ConsoleKey.Q && key != ConsoleKey.Escape);
 
     }
-    private static void RegisterFile()
+    private static List<ExcelFile> RegisterFiles(string path)
     {
-        if (_path == null)
-        {
-            Console.WriteLine("Failed to register\nPath is unavai");
-            return;
-        }
-        _excelFiles = new List<ExcelFile>();
-        var services = new RegisterFileService(_excelFiles, _path);
+        var services = new RegisterFileService(path);
         services.Process();
-        if (_excelFiles != null) Console.WriteLine($"Register Completed\nTotal Files: {_excelFiles.Count}");
-    }
-    private static void DataExtract()
-    {
-        if (_excelFiles == null)
-        {
-            Console.WriteLine("No Excel files found in the directory.");
-            return;
-        }
+        var files = services.ExcelFiles;
+        Console.WriteLine($"Register Completed\nTotal Files: {files!.Count}");
 
-        foreach (ExcelFile file in _excelFiles)
+        return files;
+
+
+    }
+    private static void DataExtract(List<ExcelFile> excelFiles)
+    {
+        foreach (ExcelFile file in excelFiles)
         {
             var extract = new DataExtractionServices(file);
             extract.Process();
         }
     }
-    private static void DataTransform()
+    private static void DataTransform(List<ExcelFile> excelFiles)
     {
-        if (_excelFiles == null)
-        {
-            Console.WriteLine("No Excel files found in the directory.");
-            return;
-        }
-        foreach (ExcelFile file in _excelFiles)
+        foreach (ExcelFile file in excelFiles)
         {
             if (file.ExtractedData == null) continue;
             var transform = new DataTransformServices(file.ExtractedData);
             transform.Process();
         }
     }
-    private static void DataLoad()
+    private static void DataLoad(List<ExcelFile> excelFiles, DataLoadServicesType type)
     {
-
+        foreach (var file in excelFiles)
+        {
+            if (file.ExtractedData == null) continue;
+            var load = new DataLoadServices(file, type);
+            load.Process();
+        }
     }
 }
