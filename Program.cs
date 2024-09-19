@@ -1,4 +1,6 @@
-﻿namespace DataExtractorXls;
+﻿using NPOI.SS.Formula.Functions;
+
+namespace DataExtractorXls;
 
 internal class Program
 {
@@ -71,9 +73,14 @@ internal class Program
     private static Dictionary<string, object> DataTransformSingleFile(List<ExcelFile> excelFiles)
     {
         Dictionary<string, object> dataSet = new Dictionary<string, object>();
+        int fileCounterId = 1;
+
         foreach (var file in excelFiles)
         {
-            dataSet.Add(file.FileNameOnly(), file.ExtractedData!);
+            string counterParse = fileCounterId.ToString();
+            string zero = new string('0', 5 - counterParse.Length);
+            dataSet.Add(zero + counterParse, file.ExtractedData!);
+            fileCounterId++;
         }
         return dataSet;
     }
