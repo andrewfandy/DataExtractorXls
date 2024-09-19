@@ -90,6 +90,8 @@ public class DataExtractionServices : IDataProcessing
                 ExtractedData!.Add(key, val);
             }
         }
+        ExtractedData!.Add("is_confirmed", false);
+        ExtractedData!.Add("is_reported", false);
     }
     public void Process()
     {

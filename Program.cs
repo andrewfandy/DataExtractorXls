@@ -25,7 +25,7 @@ internal class Program
                 {
                     var files = RegisterFiles(path);
                     DataExtract(files);
-                    DataLoad(files, DataLoadServicesType.LOAD_JSON_FILE);
+                    DataLoad(DataTransformSingleFile(files), DataLoadServicesType.LOAD_JSON_FILE);
                     Console.WriteLine("\n\nProcess Complete\nPress Enter to start again\nPress Q or Escape to exit");
                 }
                 else
@@ -60,12 +60,22 @@ internal class Program
     }
     private static void DataTransform(List<ExcelFile> excelFiles)
     {
+        Dictionary<string, object> dataSet = new Dictionary<string, object>();
         foreach (ExcelFile file in excelFiles)
         {
             if (file.ExtractedData == null) continue;
             var transform = new DataTransformServices(file.ExtractedData);
             transform.Process();
         }
+    }
+    private static Dictionary<string, object> DataTransformSingleFile(List<ExcelFile> excelFiles)
+    {
+        Dictionary<string, object> dataSet = new Dictionary<string, object>();
+        foreach (var file in excelFiles)
+        {
+            dataSet.Add(file.FileNameOnly(), file.ExtractedData!);
+        }
+        return dataSet;
     }
     private static void DataLoad(List<ExcelFile> excelFiles, DataLoadServicesType type)
     {
@@ -82,5 +92,17 @@ internal class Program
             var load = new DataLoadServices(file, type, input);
             load.Process();
         }
+    }
+    private static void DataLoad(Dictionary<string, object> dataSet, DataLoadServicesType type)
+    {
+        string input = "";
+        while (string.IsNullOrEmpty(input))
+        {
+            Console.WriteLine("\nInput the output directory name (the output still on the 'output' directory):");
+            input = Console.ReadLine()!;
+        }
+
+        var load = new DataLoadServices(dataSet, type, input);
+        load.Process();
     }
 }
