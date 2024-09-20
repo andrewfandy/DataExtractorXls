@@ -23,14 +23,17 @@ public static class RegisterExcelFile
         catch (FileNotFoundException fnfe)
         {
             Console.WriteLine($"File not found: {fnfe.Message}");
+            excelFiles.Add(null!);
         }
         catch (UnauthorizedAccessException uae)
         {
             Console.WriteLine($"Access denied: {uae.Message}");
+            excelFiles.Add(null!);
         }
         catch (Exception e)
         {
             Console.WriteLine($"An error occurred: {e.Message}");
+            excelFiles.Add(null!);
         }
 
         return excelFiles;
