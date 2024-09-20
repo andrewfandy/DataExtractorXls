@@ -4,22 +4,15 @@ using NPOI.XSSF.UserModel;
 
 namespace DataExtractorXls;
 
-public class RegisterFileService : IDataProcessing
+public static class RegisterExcelFile
 {
-    public List<ExcelFile>? ExcelFiles { get; set; }
-    private string _inputPath;
-    public RegisterFileService(string path)
+    public static List<ExcelFile> RegisterMultipleFiles(string directoryPath)
     {
-        _inputPath = path;
-        ExcelFiles = new List<ExcelFile>();
-    }
-
-    public void Process()
-    {
+        List<ExcelFile> excelFiles = new List<ExcelFile>();
         try
         {
-            Console.WriteLine($"Registering Files in {_inputPath}");
-            string[] files = Directory.GetFiles(_inputPath);
+            Console.WriteLine($"Registering Files in {directoryPath}");
+            string[] files = Directory.GetFiles(directoryPath);
 
             if (files.Length < 1)
             {
@@ -27,7 +20,7 @@ public class RegisterFileService : IDataProcessing
             }
             foreach (string file in files)
             {
-                ExcelFiles!.Add(new ExcelFile(file));
+                excelFiles!.Add(new ExcelFile(file));
             }
 
         }
@@ -44,6 +37,19 @@ public class RegisterFileService : IDataProcessing
             Console.WriteLine($"An error occurred: {e.Message}");
         }
 
+        return excelFiles;
+
+    }
+
+    public static ExcelFile RegisterSingleFile(string filePath)
+    {
+        ExcelFile excelFile;
+        if (!File.Exists(filePath) || !filePath.EndsWith(".xlsx") || !filePath.EndsWith(".xls"))
+        {
+            excelFile = null!;
+        }
+        excelFile = new ExcelFile(filePath);
+        return excelFile;
     }
 
 }
