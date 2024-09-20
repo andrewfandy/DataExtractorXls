@@ -11,11 +11,8 @@ public class DataExtractionServices : IDataProcessing
 
     public DataExtractionServices(ExcelFile excelFile)
     {
-        if (excelFile != null)
-        {
-            _excelFile = excelFile;
-            ExtractedData = _excelFile.ExtractedData;
-        }
+        _excelFile = excelFile;
+        ExtractedData = _excelFile.ExtractedData;
     }
 
     private string KeyCleaning(string key)
@@ -96,7 +93,7 @@ public class DataExtractionServices : IDataProcessing
     public void Process()
     {
 
-        if (_excelFile == null)
+        if (_excelFile == null || string.IsNullOrEmpty(_excelFile.FilePath))
         {
             Console.WriteLine("No excel files found");
             return;
