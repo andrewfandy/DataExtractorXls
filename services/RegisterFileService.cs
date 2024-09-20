@@ -1,7 +1,3 @@
-using NPOI.HSSF.UserModel;
-using NPOI.SS.UserModel;
-using NPOI.XSSF.UserModel;
-
 namespace DataExtractorXls;
 
 public static class RegisterExcelFile
