@@ -8,11 +8,18 @@ namespace DataExtractorXls;
 
 public class ExcelFile
 {
-    public string Id { get; }
+    public string Id
+    {
+        get
+        {
+            Match match = Regex.Match(FilePath, @"(?:M|DRAFT-)(\d{6})");
+            return match.Groups[1].Value;
+        }
+    }
     public string FilePath { get; set; }
     public IWorkbook Workbook { get; }
     public ISheet Sheet { get; set; }
-    public string FileType { get; set; }
+    public string FileType { get; private set; }
     public string FileNameOnly
     {
         get
@@ -36,17 +43,10 @@ public class ExcelFile
     public ExcelFile(string filePath)
     {
         FilePath = filePath;
-        Id = IdRegister();
         Workbook = workbookRegistered();
         Sheet = Workbook.GetSheetAt(0); // 0 is default
         FileType = FilePath.EndsWith(".xlsx") ? ".xlsx" : ".xls";
         ExtractedData = new Dictionary<string, object>();
-    }
-
-    private string IdRegister()
-    {
-        Match match = Regex.Match(FilePath, @"[DM](\d{6})");
-        return match.Groups[1].Value;
     }
 
     private IWorkbook workbookRegistered()
