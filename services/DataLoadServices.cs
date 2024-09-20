@@ -47,7 +47,7 @@ public class DataLoadServices : IDataProcessing
     }
     private void LoadToJson()
     {
-        string jsonFileName = _file != null ? _file!.FileNameOnly().Split().First() : "output";
+        string jsonFileName = _file != null ? _file!.Id : "output";
         string path = Path.Join(_outputPath, jsonFileName + ".json");
         File.WriteAllText(path, JsonConvert.SerializeObject(_dataSet, Formatting.Indented));
     }
