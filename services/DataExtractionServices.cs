@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 using NPOI.SS.UserModel;
 
@@ -21,13 +22,16 @@ public class DataExtractionServices : IDataProcessing
         {
             return "";
         }
+        var textInfo = CultureInfo.CurrentCulture.TextInfo;
+        var capitalized = textInfo.ToTitleCase(key.ToLower());
         StringBuilder sb = new StringBuilder();
-        foreach (char ch in key)
-        {
 
+        foreach (char ch in capitalized)
+        {
             sb.Append(!char.IsPunctuation(ch) ? ch : "");
         }
-        return sb.ToString().Trim().ToLower().Replace(" ", "_");
+
+        return sb.ToString().Trim().Replace(" ", "");
     }
     private object GetValueCellType(ICell cell)
     {
@@ -87,8 +91,8 @@ public class DataExtractionServices : IDataProcessing
                 ExtractedData!.Add(key, val);
             }
         }
-        ExtractedData!.Add("is_confirmed", false);
-        ExtractedData!.Add("is_reported", false);
+        ExtractedData!.Add("IsConfirmed", false);
+        ExtractedData!.Add("IsReported", false);
     }
     public void Process()
     {
