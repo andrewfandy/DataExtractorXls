@@ -22,15 +22,16 @@ public class DataExtractionServices : IDataProcessing
         {
             return "";
         }
+        var textInfo = CultureInfo.CurrentCulture.TextInfo;
+        var capitalized = textInfo.ToTitleCase(key.ToLower());
         StringBuilder sb = new StringBuilder();
 
-        foreach (char ch in key)
+        foreach (char ch in capitalized)
         {
             sb.Append(!char.IsPunctuation(ch) ? ch : "");
         }
-        var textInfo = CultureInfo.CurrentCulture.TextInfo;
-        var capitalized = textInfo.ToTitleCase(sb.ToString().Trim().Replace(" ", ""));
-        return capitalized;
+
+        return sb.ToString().Trim().Replace(" ", "");
     }
     private object GetValueCellType(ICell cell)
     {
