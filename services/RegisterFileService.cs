@@ -40,12 +40,12 @@ public static class RegisterExcelFile
 
     }
 
-    public static ExcelFile RegisterSingleFile(string filePath)
+    public static ExcelFile? RegisterSingleFile(string filePath)
     {
         ExcelFile excelFile;
         if (!File.Exists(filePath) || !filePath.EndsWith(".xlsx") || !filePath.EndsWith(".xls"))
         {
-            excelFile = null!;
+            return null;
         }
         excelFile = new ExcelFile(filePath);
         return excelFile;
