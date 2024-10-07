@@ -25,8 +25,11 @@ internal class Program
                 if (!string.IsNullOrEmpty(path))
                 {
                     var files = RegisterExcelFile.RegisterMultipleFiles(path);
-                    DataExtract(files);
-                    DataLoad(DataTransformMultipleFiles(files), DataLoadServicesType.LOAD_JSON_FILE);
+                    if (files != null)
+                    {
+                        DataExtract(files);
+                        DataLoad(DataTransformMultipleFiles(files), DataLoadServicesType.LOAD_JSON_FILE);
+                    }
                     Console.WriteLine("\n\nProcess Complete\nPress Enter to start again\nPress Q or Escape to exit");
                 }
                 else
@@ -34,7 +37,6 @@ internal class Program
                     Console.WriteLine("Path is null or empty");
                     continue;
                 }
-                key = Console.ReadKey(intercept: true).Key;
             }
 
         } while (key != ConsoleKey.Q && key != ConsoleKey.Escape);
@@ -72,30 +74,16 @@ internal class Program
     }
     private static void DataLoad(List<ExcelFile> excelFiles, DataLoadServicesType type)
     {
-        string path = "";
-        while (string.IsNullOrEmpty(path))
-        {
-            Console.WriteLine("\nInput the output directory name (the output still on the 'output' directory):");
-            path = Console.ReadLine()!;
-        }
-
         foreach (var file in excelFiles)
         {
             if (file.ExtractedData == null) continue;
-            var load = new DataLoadServices(file, type, path);
+            var load = new DataLoadServices(file, type);
             load.Process();
         }
     }
     private static void DataLoad(Dictionary<string, object> dataSet, DataLoadServicesType type)
     {
-        string path = "";
-        while (string.IsNullOrEmpty(path))
-        {
-            Console.WriteLine("\nInput the output directory name (the output still on the 'output' directory):");
-            path = Console.ReadLine()!;
-        }
-
-        var load = new DataLoadServices(dataSet, type, path);
+        var load = new DataLoadServices(dataSet, type);
         load.Process();
     }
 }

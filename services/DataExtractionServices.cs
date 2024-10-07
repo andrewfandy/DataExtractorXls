@@ -98,19 +98,28 @@ public class DataExtractionServices : IDataProcessing
     }
     public void Process()
     {
-
-        if (_excelFile == null || string.IsNullOrEmpty(_excelFile.FilePath))
+        try
         {
-            Console.WriteLine("No excel files found");
-            return;
+
+
+            if (_excelFile == null || string.IsNullOrEmpty(_excelFile.FilePath))
+            {
+                Console.WriteLine("No excel files found");
+                return;
+            }
+            using (new FileStream(_excelFile.FilePath, FileMode.Open, FileAccess.Read))
+            {
+                ISheet? sheet = _excelFile.Sheet;
+
+                // Extracting Data
+                Extract(sheet);
+
+            }
         }
-        using (new FileStream(_excelFile.FilePath, FileMode.Open, FileAccess.Read))
+        catch (FileNotFoundException fnfe)
         {
-            ISheet? sheet = _excelFile.Sheet;
-
-            // Extracting Data
-            Extract(sheet);
-
+            Console.Write($"ERROR:{fnfe.Message}");
+            return;
         }
 
     }
