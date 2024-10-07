@@ -22,12 +22,14 @@ public class DataExtractionServices : IDataProcessing
         {
             return "";
         }
-        var textInfo = CultureInfo.CurrentCulture.TextInfo;
-        var capitalized = textInfo.ToTitleCase(key.ToLower());
-        StringBuilder sb = new StringBuilder();
 
-        foreach (char ch in capitalized)
+        StringBuilder sb = new StringBuilder();
+        int counter = 0;
+        foreach (char ch in key.ToLower())
         {
+            if (counter == 0) { char.ToUpper(ch); counter += 1; }
+            if (ch == ' ' && counter == 1) counter = 0;
+
             sb.Append(!char.IsPunctuation(ch) ? ch : "");
         }
 
