@@ -22,14 +22,15 @@ public class DataExtractionServices : IDataProcessing
         {
             return "";
         }
+        var text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(key.ToLower()).Split(" ");
+
+        StringBuilder sb1 = new StringBuilder();
+        sb1.Append(text[0].ToLower());
+        if (text.Count() > 1) { sb1.Append(text[1]); }
 
         StringBuilder sb = new StringBuilder();
-        int counter = 0;
-        foreach (char ch in key.ToLower())
+        foreach (char ch in sb1.ToString())
         {
-            if (counter == 0) { char.ToUpper(ch); counter += 1; }
-            if (ch == ' ' && counter == 1) counter = 0;
-
             sb.Append(!char.IsPunctuation(ch) ? ch : "");
         }
 
@@ -93,8 +94,8 @@ public class DataExtractionServices : IDataProcessing
                 ExtractedData!.Add(key, val);
             }
         }
-        ExtractedData!.Add("IsConfirmed", false);
-        ExtractedData!.Add("IsReported", false);
+        ExtractedData!.Add("isConfirmed", false);
+        ExtractedData!.Add("isReported", false);
     }
     public void Process()
     {
